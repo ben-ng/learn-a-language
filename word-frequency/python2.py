@@ -1,26 +1,27 @@
 #!/usr/bin/python
 
 from argparse import ArgumentParser
+from collections import defaultdict
+import itertools
 import re
 
 p = ArgumentParser()
 p.add_argument('n', type=int)
 args = p.parse_args()
-d = {}
 
+# use int as the default_factory
+# int() is called to supply a default value of 0
+d = defaultdict(int)
+
+# this implicitly closes the file when done
 with open('2cities.txt') as f:
-	for line in f:
-		for word in re.compile("[a-z]+", re.IGNORECASE).findall(line):
-			nword = word.lower()
-			
-			# dict.[word] causes a KeyError if the key does not exist
-			# but dict.get(word) does not!
-			# 
-			# Python's ternary operator looks like this:
-			# (foo) if (condition) else (bar)
-			d[nword] = 1 if d.get(nword) == None else d[nword] + 1
+	# this creates a lazy iterator
+	words = itertools.imap(lambda line: re.compile("[a-z]+", re.IGNORECASE).findall(line), f)
+	
+	# the chain.from_iterable flattens words (there's no flatmap)
+	for word in itertools.chain.from_iterable(words):
+		d[word.lower()] += 1
 
-top = sorted(d.items(), key=lambda (_, cnt): cnt, reverse=True)[:args.n]
-
-for (word, count) in top:
+# (_, cnt) destructures the tuples we get from d.items(), [:n] slices results
+for (word, count) in sorted(d.items(), key=lambda (_, cnt): cnt, reverse=True)[:args.n]:
 	print "%d %s" % (count, word)
