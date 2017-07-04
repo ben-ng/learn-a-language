@@ -2,7 +2,7 @@
 
 Given the ID of the last tweet in a reply-chain of tweets, print the tweets in chronological order. Start by printing the screen name of the author and the creation date of the first tweet. Underline the first line with `=`.
 
-sh```
+```sh
 # Create a Twitter app on their developer site, then
 # get CONSUMER_KEY and CONSUMER_SECRET from your Application Settings
 # at https://apps.twitter.com/app/your_app_id/keys
@@ -20,7 +20,7 @@ You can use [this tweet](https://twitter.com/sarahmei/status/880970153583718401)
 
 ## Sample Output
 
-```
+```md
 @sarahmei, at Sat Jul 01 00:19:36 +0000 2017
 ============================================
 
